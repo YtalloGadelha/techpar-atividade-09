@@ -1,5 +1,6 @@
 package com.example.ytallo.listaprodutos
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.*
@@ -53,8 +54,11 @@ class MainActivity : AppCompatActivity() {
                     // Set an item click listener for ListView
                     listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
 
-                        Toast.makeText(this, "Produto: " + produtoList[position].nomeproduto + "  Descrição: "
-                                + produtoList[position].descricaoproduto, Toast.LENGTH_LONG).show()
+//                        Toast.makeText(this, "Produto: " + produtoList[position].nomeproduto + "  Descrição: "
+//                                + produtoList[position].descricaoproduto, Toast.LENGTH_LONG).show()
+
+                        var intent: Intent = Intent(this, DetalhesActivity::class.java)
+                        startActivity(intent)
 
                     }
 
