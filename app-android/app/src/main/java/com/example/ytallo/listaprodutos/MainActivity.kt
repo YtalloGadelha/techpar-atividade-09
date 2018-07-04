@@ -2,8 +2,7 @@ package com.example.ytallo.listaprodutos
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.ArrayAdapter
-import android.widget.ListView
+import android.widget.*
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonArrayRequest
@@ -51,7 +50,16 @@ class MainActivity : AppCompatActivity() {
                     //Adiconando o adapter ao listView
                     listView.adapter = adapter
 
+                    // Set an item click listener for ListView
+                    listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+
+                        Toast.makeText(this, "Produto: " + produtoList[position].nomeproduto + "  Descrição: "
+                                + produtoList[position].descricaoproduto, Toast.LENGTH_LONG).show()
+
+                    }
+
                 },
+
                 Response.ErrorListener { error ->
 
                     println("Erro!")
