@@ -32,6 +32,16 @@ app.post("/save", (req, res) => {
   })
 })
 
+app.put("/save", (req, res) => {
+  const produto = req.body
+  knex("produto").where("idproduto", produto.idproduto).update(produto).then(ret => {
+      res.send(ret)
+  }).catch(err => {
+    res.status(500).send(err)
+    console.log(err)
+  })
+})
+
 knex.migrate.latest().then(_ =>
   app.listen(3000, _ =>
 console.log("Servidor online!")))
