@@ -1,6 +1,5 @@
 package com.example.ytallo.listaprodutos
 
-import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -8,15 +7,9 @@ import android.widget.*
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
 import com.google.gson.GsonBuilder
-import com.android.volley.VolleyError
 import org.json.JSONObject
-import com.android.volley.Request.Method.POST
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
-import com.google.gson.JsonObject
-import com.google.gson.reflect.TypeToken
-import org.xml.sax.Parser
-
 
 class DetalhesActivity : AppCompatActivity() {
 
@@ -63,8 +56,10 @@ class DetalhesActivity : AppCompatActivity() {
 
             produtoSalvo = produto.copy()
 
+            //Instanciando o gson
             val gson = GsonBuilder().setPrettyPrinting().create()
 
+            //Populando o objeto com as alterações
             produtoSalvo.idproduto = textId.text.toString().toInt()
             produtoSalvo.nomeproduto = editNome.text.toString()
             produtoSalvo.precoproduto = editPreco.text.toString()
@@ -73,14 +68,8 @@ class DetalhesActivity : AppCompatActivity() {
             //Criando string no formato de json a partir do objeto produtoSalvo
             val stringPoduto: String = gson.toJson(produtoSalvo)
 
-            //println(produtoSalvo)
-            //println(jsonProduto)
-
-
             //Criando json a partir de uma string
             val jsonObject = JSONObject(stringPoduto)
-
-            println("Nome: ${jsonObject["nomeproduto"]}, Preço: ${jsonObject["precoproduto"]} , Descrição: ${jsonObject["descricaoproduto"]}")
 
             // Instanciando a RequestQueue.
             var queue = Volley.newRequestQueue(this)
@@ -88,19 +77,21 @@ class DetalhesActivity : AppCompatActivity() {
             //Criando a URL
             var url = "http://192.168.122.1:3000/save"
 
-
+            //Criando a requisição. Verbo PUT
             val request = JsonObjectRequest( Request.Method.PUT, url, jsonObject,
                     Response.Listener { response ->
 
-                        println("Deu certo??? ${response}")
+                        Toast.makeText(this, "Salvo com sucesso!", Toast.LENGTH_SHORT).show()
+                        finish()
                     },
 
                     Response.ErrorListener { error ->
 
-                        println("Erro: ${error}")
+                        Toast.makeText(this, "BD bugado", Toast.LENGTH_SHORT).show()
+                        finish()
                     }
-
             )
+            //Adicionando a requisição na RequestQueue.
             queue.add(request)
         })
     }
