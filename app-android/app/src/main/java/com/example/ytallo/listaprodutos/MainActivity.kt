@@ -49,6 +49,8 @@ class MainActivity : AppCompatActivity() {
 
                     //Criando a lista de produtos
                     produtoList = gson.fromJson(jsonList, object : TypeToken<List<Produtos>>() {}.type)
+
+                    //Mostrando a lista no console
                     println("=== List from JSON ===")
                     produtoList.forEach {println(it)}
 
