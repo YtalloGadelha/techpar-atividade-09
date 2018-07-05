@@ -13,3 +13,4 @@ Atividade 9, treinamento TechPar.
 - criar um aplicativo android para consumir este serviço
    - uma tela para listar os produtos
    - uma tela para ver os detalhes do produto
+     - permitir alterações
