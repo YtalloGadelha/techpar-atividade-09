@@ -11,5 +11,5 @@ Atividade 9, treinamento TechPar.
    criar o banco de dados de produtos (esquema)
    alimentar a base com produtos (carga)
 - criar um aplicativo android para consumir este serviço
-   uma tela para listar os produtos
-   uma tela para ver os detalhes do produto
+   - uma tela para listar os produtos
+   - uma tela para ver os detalhes do produto
