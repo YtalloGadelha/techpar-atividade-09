@@ -30,6 +30,11 @@ class MainActivity : AppCompatActivity() {
 
         //referêciando a listView a partir do identificador
         listView = findViewById(R.id.list_view)
+    }
+
+    //Função chamada na criação de e restart da activity
+    override fun onResume() {
+        super.onResume()
 
         // Instanciando a RequestQueue.
         queue = Volley.newRequestQueue(this)
@@ -56,9 +61,9 @@ class MainActivity : AppCompatActivity() {
 
                     //Criando o adapter necessário ao listView
                     adapter = ArrayAdapter<Produtos>(
-                    this, // Context
-                    android.R.layout.simple_list_item_1, // Layout
-                    produtoList // List
+                            this, // Context
+                            android.R.layout.simple_list_item_1, // Layout
+                            produtoList // List
                     )
 
                     //Adiconando o adapter ao listView
@@ -80,7 +85,6 @@ class MainActivity : AppCompatActivity() {
                     println("Erro: ${error}")
                 }
         )
-
         //Adicionando a requisição na RequestQueue.
         queue.add(jsonArrayRequest)
     }
