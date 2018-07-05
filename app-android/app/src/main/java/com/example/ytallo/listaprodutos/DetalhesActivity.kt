@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import com.google.gson.GsonBuilder
 
 class DetalhesActivity : AppCompatActivity() {
 
@@ -14,7 +15,9 @@ class DetalhesActivity : AppCompatActivity() {
     lateinit var editPreco: EditText
     lateinit var editDescricao: EditText
     lateinit var botaoVoltar: Button
-    lateinit var produtos: Produtos
+    lateinit var botaoSalvar: Button
+    lateinit var produto: Produtos
+    lateinit var produtoSalvo: Produtos
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,25 +25,47 @@ class DetalhesActivity : AppCompatActivity() {
 
         //Referenciando os componentes de acordo com os identificadores
         textId = findViewById(R.id.text_view_id)
-        editNome = findViewById(R.id.edit_text_nome)
-        editPreco = findViewById(R.id.edit_text_preco)
-        editDescricao= findViewById(R.id.edit_text_descricao)
+        editNome = findViewById<EditText>(R.id.edit_text_nome)
+        editPreco = findViewById<EditText>(R.id.edit_text_preco)
+        editDescricao = findViewById<EditText>(R.id.edit_text_descricao)
         botaoVoltar = findViewById(R.id.button_voltar)
+        botaoSalvar = findViewById(R.id.button_salvar)
 
         //Criando a Intent para capturar os dados enviados pela navegação
         var intent = getIntent()
-        produtos = intent.getParcelableExtra("produto")
+        produto = intent.getParcelableExtra("produto")
 
         //Populando os componentes com os dados passados pela Intent
-        textId.text = produtos.idproduto.toString()
-        editNome.setText(produtos.nomeproduto)
-        editPreco.setText(produtos.precoproduto)
-        editDescricao.setText(produtos.descricaoproduto)
+        textId.text = produto.idproduto.toString()
+        editNome.setText(produto.nomeproduto)
+        editPreco.setText(produto.precoproduto)
+        editDescricao.setText(produto.descricaoproduto)
 
-        //Finalizando a atividade ao clicar no botão voltar
+        //Configurando o botão voltar
         botaoVoltar.setOnClickListener(View.OnClickListener {
 
+            //Finalizando a atividade
             finish()
+        })
+
+        //Configurando o botão salvar
+        botaoSalvar.setOnClickListener(View.OnClickListener {
+
+            produtoSalvo = produto.copy()
+
+            val gson = GsonBuilder().setPrettyPrinting().create()
+
+            produtoSalvo.idproduto = textId.text.toString().toInt()
+            produtoSalvo.nomeproduto = editNome.text.toString()
+            produtoSalvo.precoproduto = editPreco.text.toString()
+            produtoSalvo.descricaoproduto = editDescricao.text.toString()
+
+            val jsonProduto: String = gson.toJson(produtoSalvo)
+
+            println(produtoSalvo)
+
+            println(jsonProduto)
+
         })
     }
 }
