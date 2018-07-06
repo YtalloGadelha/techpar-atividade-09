@@ -23,6 +23,8 @@ app.get("/list", (req, res) => {
 app.post("/save", (req, res) => {
   const produto = req.body
   console.log(produto)
+  produto.idproduto = null
+  //delete produto.idproduto
   knex("produto").insert(produto, "idproduto").then(ret => {
       console.log(ret)
       res.send(ret)
