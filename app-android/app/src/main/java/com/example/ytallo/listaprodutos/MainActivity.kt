@@ -3,6 +3,7 @@ package com.example.ytallo.listaprodutos
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.*
 import com.android.volley.Request
 import com.android.volley.RequestQueue
@@ -15,6 +16,7 @@ import com.google.gson.reflect.TypeToken
 
 class MainActivity : AppCompatActivity() {
 
+    lateinit var botaoAdicionar: Button
     lateinit var listView: ListView
     lateinit var queue: RequestQueue
     lateinit var url: String
@@ -28,8 +30,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        //referêciando a listView a partir do identificador
+        //referêciando os componentes a partir do identificador
         listView = findViewById(R.id.list_view)
+        botaoAdicionar = findViewById(R.id.button_adicionar)
+
     }
 
     //Função chamada na criação de e restart da activity
@@ -56,8 +60,8 @@ class MainActivity : AppCompatActivity() {
                     produtoList = gson.fromJson(jsonList, object : TypeToken<List<Produtos>>() {}.type)
 
                     //Mostrando a lista no console
-                    println("=== List from JSON ===")
-                    produtoList.forEach {println(it)}
+                    //println("=== List from JSON ===")
+                    //produtoList.forEach {println(it)}
 
                     //Criando o adapter necessário ao listView
                     adapter = ArrayAdapter<Produtos>(
@@ -78,6 +82,19 @@ class MainActivity : AppCompatActivity() {
 
                         startActivity(intent)
                     }
+
+                    //Implementando a ação do botão adicionar
+                    botaoAdicionar.setOnClickListener(View.OnClickListener {
+
+                        //Criando a Intent para fazer a navegação
+                        var intent: Intent = Intent(this, DetalhesActivity::class.java)
+
+                        //Instanciando um produto nulo
+                        var produtoNulo = Produtos(-1, "", "", "")
+                        intent.putExtra("produto", produtoNulo)
+
+                        startActivity(intent)
+                    })
                 },
 
                 Response.ErrorListener { error ->
