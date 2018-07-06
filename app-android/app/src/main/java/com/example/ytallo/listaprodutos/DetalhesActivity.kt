@@ -1,5 +1,6 @@
 package com.example.ytallo.listaprodutos
 
+import android.app.VoiceInteractor
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -14,6 +15,7 @@ import com.android.volley.toolbox.JsonObjectRequest
 class DetalhesActivity : AppCompatActivity() {
 
     lateinit var textId: TextView
+    lateinit var textID: TextView
     lateinit var editNome: EditText
     lateinit var editPreco: EditText
     lateinit var editDescricao: EditText
@@ -21,6 +23,7 @@ class DetalhesActivity : AppCompatActivity() {
     lateinit var botaoSalvar: Button
     lateinit var produto: Produtos
     lateinit var produtoSalvo: Produtos
+    lateinit var textTitulo: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,15 +31,26 @@ class DetalhesActivity : AppCompatActivity() {
 
         //Referenciando os componentes de acordo com os identificadores
         textId = findViewById(R.id.text_view_id)
-        editNome = findViewById<EditText>(R.id.edit_text_nome)
-        editPreco = findViewById<EditText>(R.id.edit_text_preco)
-        editDescricao = findViewById<EditText>(R.id.edit_text_descricao)
+        textID = findViewById(R.id.textViewID)
+        editNome = findViewById(R.id.edit_text_nome)
+        editPreco = findViewById(R.id.edit_text_preco)
+        editDescricao = findViewById(R.id.edit_text_descricao)
         botaoVoltar = findViewById(R.id.button_voltar)
         botaoSalvar = findViewById(R.id.button_salvar)
+        textTitulo = findViewById(R.id.text_titulo)
 
         //Criando a Intent para capturar os dados enviados pela navegação
         var intent = getIntent()
         produto = intent.getParcelableExtra("produto")
+
+        //Tirando a visibilidade dos campos ID
+        if (produto.idproduto == -1){
+
+            textTitulo.setText("Novo Produto")
+            //limpando os campos dos componentes
+            textID.visibility = View.INVISIBLE
+            textId.visibility = View.INVISIBLE
+        }
 
         //Populando os componentes com os dados passados pela Intent
         textId.text = produto.idproduto.toString()
@@ -54,7 +68,7 @@ class DetalhesActivity : AppCompatActivity() {
         //Configurando o botão salvar
         botaoSalvar.setOnClickListener(View.OnClickListener {
 
-            produtoSalvo = produto.copy()
+            produtoSalvo = Produtos(0,"","","")
 
             //Instanciando o gson
             val gson = GsonBuilder().setPrettyPrinting().create()
@@ -62,7 +76,7 @@ class DetalhesActivity : AppCompatActivity() {
             //Populando o objeto com as alterações
             produtoSalvo.idproduto = textId.text.toString().toInt()
             produtoSalvo.nomeproduto = editNome.text.toString()
-            produtoSalvo.precoproduto = editPreco.text.toString()
+            produtoSalvo.precoproduto = "R$${editPreco.text.toString()}"
             produtoSalvo.descricaoproduto = editDescricao.text.toString()
 
             //Criando string no formato de json a partir do objeto produtoSalvo
@@ -77,8 +91,9 @@ class DetalhesActivity : AppCompatActivity() {
             //Criando a URL
             var url = "http://192.168.122.1:3000/save"
 
-            //Criando a requisição. Verbo PUT
-            val request = JsonObjectRequest( Request.Method.PUT, url, jsonObject,
+            //Criando a requisição. Verbo PUT || POST
+            val httpProtocolo = if(produtoSalvo.idproduto == -1) Request.Method.POST else Request.Method.PUT
+            val request = JsonObjectRequest( httpProtocolo, url, jsonObject,
                     Response.Listener { response ->
 
                         Toast.makeText(this, "Salvo com sucesso!", Toast.LENGTH_SHORT).show()
